@@ -1,0 +1,4 @@
+This is a basic test.
+With a couple of lines of text.
+Just so I can test my get_next_line with it.
+End of file...
