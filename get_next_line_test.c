@@ -23,7 +23,7 @@ int main(void)
 
 }
 
-testfile(char *file, size_t filesize, int testcount)
+testfile(char *file, size_t filesize, int test_count)
 {
 	int exp_file = open(file, O_RDONLY);
 	int res_file = open("res.txt", O_RDWR | O_CREAT | O_TRUNC, 0777);
