@@ -4,23 +4,26 @@ SRCFILES := $(SRCPATH)get_next_line.c $(SRCPATH)get_next_line_utils.c
 OUTDIR = outs/
 # Compiler and flags
 CC = cc
-CFLAGS = -Wno-format-security -g3 -lbsd -I $(SRCPATH)
-FULLDEBUGFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I$(SRCPATH)
+FULLDEBUGFLAGS = -fsanitize=address
 
 SRCS = get_next_line_test.c
 
+BUFFERS = 0 1 2 5 10 100 1024 100000
+
 # Create a list of output .out files based on test.c files
-OUTS = $(patsubst %.c, $(OUTDIR)%.out, $(SRCS))
+OUTS = $(patsubst %, $(OUTDIR)buffer_%.out, $(BUFFERS))
+#BUFFERFLAG = $(patsubst %, BUFFER_SIZE=%, $(BUFFERS))
 
 # Default target: build all tests
-all: $(SRCFILES) $(OUTDIR) $(OUTS)
+all: $(SRCFILES) $(OUTDIR) $(OUTS) main.c
 
 $(OUTDIR):
 	mkdir -p $(OUTDIR)
 
 # Rule to create .out files from .c files
-$(OUTDIR)%.out: %.c
-	$(CC) $(CFLAGS) -o $@ $< $(SRCFILES)
+$(OUTDIR)buffer_%.out: main.c $(SRCFILES)
+	$(CC) $(CFLAGS) -D BUFFER_SIZE=$* -o $@ $< $(SRCFILES)
 
 # Run all .out files
 run:
